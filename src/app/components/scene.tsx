@@ -36,7 +36,7 @@ function Sun({ modelPath, scale }: { modelPath: string; scale: number }) {
     return (
         <group position={[10, 0, 50]} scale={scale}>
             <primitive ref={sunRef} object={scene} />
-            <pointLight intensity={3000} color="white" />
+            <pointLight intensity={5000} color="white" />
         </group>
     )
 }
@@ -64,7 +64,7 @@ export default function Scene({
             <Stars radius={100} depth={50} count={5000} factor={4} fade />
 
             {/* Lighting */}
-            <ambientLight intensity={0.8} />
+            <ambientLight intensity={0.7} />
 
             {/* Sun + Planet */}
             <Sun modelPath={sunModel.path} scale={sunModel.scale} />
