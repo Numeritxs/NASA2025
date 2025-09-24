@@ -1,10 +1,11 @@
 // src/app/page.js
 "use client"
 
-import { Canvas, useThree } from '@react-three/fiber'
+import { Canvas, useThree, useFrame} from '@react-three/fiber'
 import { Stars, useGLTF, OrbitControls } from '@react-three/drei'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
+
 
 function Planet() {
   const { scene } = useGLTF('/models/smaller.glb')
