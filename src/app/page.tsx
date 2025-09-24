@@ -1,71 +1,62 @@
 // src/app/page.js
 "use client"
 
-import { Canvas, useThree, useFrame} from '@react-three/fiber'
-import { Stars, useGLTF, OrbitControls } from '@react-three/drei'
-import { useEffect, useRef } from 'react'
-import gsap from 'gsap'
+import { useState } from "react"
+import Scene from "./components/scene"
 
-
-function Planet() {
-  const { scene } = useGLTF('/models/smaller.glb')
-  return <primitive object={scene} scale={0.5} />
+type ModelConfig = {
+  path: string
+  scale: number
 }
 
-function Sun() {
-  return (
-    <mesh position={[10, 10, 10]}>
-      <sphereGeometry args={[2, 32, 32]} />
-      {/* Use meshStandardMaterial for emissive glow */}
-      <meshStandardMaterial color="orange" emissive="yellow" emissiveIntensity={2} />
-      <pointLight intensity={10} color="white" />
-    </mesh>
-  )
+const planetModels: Record<string, ModelConfig> = {
+  earth: { path: "/models/smaller.glb", scale: 0.5 },
+  neptune: { path: "/models/neptune.glb", scale: 0.5 },
+  mars: { path: "/models/mars.glb", scale: 0.5 },
 }
 
-
-// Camera zoom animation
-function CameraZoom() {
-  const { camera } = useThree()
-  useEffect(() => {
-    camera.position.set(0, 0, 20)
-    gsap.to(camera.position, { z: 5, duration: 5, ease: 'power2.inOut' })
-  }, [camera])
-  return null
+const sunModels: Record<string, ModelConfig> = {
+  sun: { path: "/models/sun.glb", scale: 1 },
 }
+
 
 export default function Home() {
+  const [planet, setPlanet] = useState<ModelConfig | null>(null)
+  const [input, setInput] = useState("")
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+
+    const key = input.toLowerCase()
+    if (planetModels[key]) {
+      setPlanet(planetModels[key])
+    } else {
+      alert("Unknown planet. Try earth, neptune, mars.")
+    }
+  }
+
   return (
-    <div className="w-screen h-screen">
-      <Canvas camera={{ position: [0, 0, 20], fov: 60 }}>
-        {/* Stars background */}
-        <Stars radius={100} depth={50} count={5000} factor={4} fade />
-
-        {/* Add a Sun light */}
-        <pointLight
-          position={[10, 10, 10]}   // Sun position
-          intensity={500}             // brightness
-          color="white"
-        />
-
-        {/* Optional: soft ambient light so shadows aren’t fully black */}
-        <ambientLight intensity={1} />
-
-        {/* Planet */}
-        <Planet />
-        <Sun />
-
-        {/* Camera animation */}
-        <CameraZoom />
-
-        {/* Orbit controls */}
-        <OrbitControls 
-          enableZoom={true}
-          minDistance={2}
-          maxDistance={50}
-          enablePan={false}
-        />
-      </Canvas>
+    <div className="w-screen h-screen flex flex-col items-center justify-center bg-black text-white">
+      {!planet ? (
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <label>
+            Enter planet name:
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              className="text-black p-2 rounded"
+            />
+          </label>
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded"
+          >
+            Show Planet
+          </button>
+        </form>
+      ) : (
+        <Scene planetModel={planet} sunModel={sunModels["sun"]} />)}
     </div>
   )
 }
