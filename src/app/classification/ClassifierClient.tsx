@@ -16,6 +16,33 @@ function PlanetModel({ modelPath, scale }: { modelPath: string; scale: number })
   return <primitive object={scene} scale={scale} />
 }
 
+function downloadResults(results: ClassificationResult[], format: "csv" | "json") {
+  let blob: Blob
+  let filename: string
+
+  if (format === "json") {
+    blob = new Blob([JSON.stringify(results, null, 2)], { type: "application/json" })
+    filename = "classification_results.json"
+  } else {
+    // CSV
+    const headers = Object.keys(results[0]).join(",")
+    const rows = results.map(r => Object.values(r).join(",")).join("\n")
+    const csv = `${headers}\n${rows}`
+    blob = new Blob([csv], { type: "text/csv" })
+    filename = "classification_results.csv"
+  }
+
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement("a")
+  a.href = url
+  a.download = filename
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  URL.revokeObjectURL(url)
+}
+
+
 // 🔹 Mapping classification → model paths
 const planetModels: Record<string, { path: string; scale: number }> = {
   Earth: { path: "/models/earth.glb", scale: 0.3 },
@@ -67,7 +94,7 @@ export default function ClassifierClient() {
         onSubmit={handleSubmit}
         className="flex flex-col gap-4 bg-white/10 p-6 rounded-lg shadow-lg"
       >
-         { /*".csv,.json" */}
+        { /*".csv,.json" */}
         <input
           type="file"
           accept="*"
@@ -110,6 +137,22 @@ export default function ClassifierClient() {
               ))}
             </tbody>
           </table>
+          
+          {/* Download buttons */}
+          <div className="flex gap-2 justify-end">
+            <button
+              onClick={() => downloadResults(results, "csv")}
+              className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded"
+            >
+              Download CSV
+            </button>
+            <button
+              onClick={() => downloadResults(results, "json")}
+              className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded"
+            >
+              Download JSON
+            </button>
+          </div>
         </div>
       )}
 
