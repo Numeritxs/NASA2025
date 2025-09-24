@@ -43,7 +43,7 @@ export default function Home() {
   const backgroundStyle = planet
     ? {} // No background when a planet is selected
     : {
-      backgroundImage: "url('/images/space-bg.jpg')", // your image path
+      backgroundImage: "url('/images/space-bg.jpg')",
       backgroundSize: "cover",
       backgroundPosition: "center",
     }

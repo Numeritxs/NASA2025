@@ -3,25 +3,90 @@
 
 import { Canvas, useThree } from "@react-three/fiber"
 import { Stars, OrbitControls, useGLTF } from "@react-three/drei"
-import { useRef, useEffect } from "react"
+import { useRef, useEffect, useState } from "react"
 import { useFrame } from "@react-three/fiber"
 import gsap from "gsap"
 import * as THREE from "three"
+import { Html } from "@react-three/drei"
+
+
+
+type Hotspot = {
+    position: [number, number, number]
+    title: string
+    description: string
+}
+
+type Hotspot2D = {
+    screenPosition: [number, number]
+    title: string
+    description: string
+}
+
+const hotspots2D: Hotspot2D[] = [
+    { screenPosition: [-100, 50], title: "1", description: "This is Jupiter's Great Red Spot" },
+    { screenPosition: [120, 80], title: "2", description: "Jupiter's belts and zones" },
+]
+
+function FixedHotspots({ hotspots }: { hotspots: Hotspot2D[] }) {
+    const [activeIndex, setActiveIndex] = useState<number | null>(null)
+
+    return (
+        <>
+            {hotspots.map((hotspot, i) => (
+                <Html
+                    key={i}
+                    style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: `translate(${hotspot.screenPosition[0]}px, ${hotspot.screenPosition[1]}px)`,
+                        pointerEvents: "auto",
+                        zIndex: 10,
+                    }}
+                >
+                    <div
+                        className="relative pointer-events-auto"
+                        onClick={() => setActiveIndex(i === activeIndex ? null : i)}
+                    >
+                        {/* Numbered marker */}
+                        <div className="bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold shadow-lg hover:bg-blue-500 transition animate-pulse">
+                            {hotspot.title}
+                        </div>
+
+                        {/* Tooltip */}
+                        {activeIndex === i && (
+                            <div className="absolute top-14 left-1/2 -translate-x-1/2 bg-black/90 text-white p-3 rounded shadow-lg max-w-xs z-50 pointer-events-auto">
+                                <h3 className="font-bold mb-1">{hotspot.title}</h3>
+                                <p className="text-sm">{hotspot.description}</p>
+                            </div>
+                        )}
+                    </div>
+                </Html>
+            ))}
+        </>
+    )
+}
+
 
 // Planet
 function Planet({ modelPath, scale }: { modelPath: string; scale: number }) {
     const planetRef = useRef<THREE.Object3D>(null!)
     const { scene } = useGLTF(modelPath)
 
-    // Spin around Y-axis
     useFrame(() => {
         if (planetRef.current) {
-            planetRef.current.rotation.y += 0.0009
+            planetRef.current.rotation.y += 0.0002
         }
     })
 
-    return <primitive ref={planetRef} object={scene} scale={scale} />
+    return (
+        <group ref={planetRef} scale={scale}>
+            <primitive object={scene} />
+        </group>
+    )
 }
+
 // Sun
 function Sun({ modelPath, scale }: { modelPath: string; scale: number }) {
     const sunRef = useRef<THREE.Object3D>(null!)
@@ -72,6 +137,8 @@ export default function Scene({
 
             {/* Zoom animation after selection */}
             <CameraZoom />
+
+            <FixedHotspots hotspots={hotspots2D} />
 
             {/* Controls */}
             <OrbitControls
