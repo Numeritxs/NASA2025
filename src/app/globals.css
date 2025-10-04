@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Flag Icons CSS */
+@import 'flag-icons/css/flag-icons.min.css';
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
