@@ -9,15 +9,15 @@ export default function ShowcasePage() {
     // Dynamic import to avoid SSR issues
     const loadGame = async () => {
       try {
-        // Import the game components
-        const { ExoplanetGame } = await import("./ExoplanetGame")
+        // Import the game utilities from main.ts
+        const { initializeGame, cleanupGame } = await import("./main")
         
         // Clear container
         if (containerRef.current) {
           containerRef.current.innerHTML = ""
           
-          // Initialize the game
-          new ExoplanetGame(containerRef.current)
+          // Initialize the game using the utility function
+          initializeGame(containerRef.current)
         }
       } catch (error) {
         console.error("Error loading exoplanet game:", error)
@@ -36,6 +36,16 @@ export default function ShowcasePage() {
 
     // Cleanup function
     return () => {
+      const cleanup = async () => {
+        try {
+          const { cleanupGame } = await import("./main")
+          cleanupGame()
+        } catch (error) {
+          console.error("Error during cleanup:", error)
+        }
+      }
+      cleanup()
+      
       if (containerRef.current) {
         containerRef.current.innerHTML = ""
       }

@@ -217,7 +217,8 @@ export class ExoplanetClassifier {
           temperature: 288,
           orbitalDistance: 1.0,
           atmosphere: 1.0,
-          composition: 71
+          composition: 71,
+          brightness: 1.0
         }
       },
       {
@@ -228,7 +229,8 @@ export class ExoplanetClassifier {
           temperature: 280,
           orbitalDistance: 0.8,
           atmosphere: 2.5,
-          composition: 65
+          composition: 65,
+          brightness: 1.0
         }
       },
       {
@@ -239,7 +241,56 @@ export class ExoplanetClassifier {
           temperature: 295,
           orbitalDistance: 1.2,
           atmosphere: 1.5,
-          composition: 95
+          composition: 95,
+          brightness: 1.0
+        }
+      },
+      {
+        name: 'Hot Jupiter',
+        parameters: {
+          mass: 150,
+          radius: 12,
+          temperature: 1500,
+          orbitalDistance: 0.05,
+          atmosphere: 80,
+          composition: 5,
+          brightness: 1.5
+        }
+      },
+      {
+        name: 'Gas Giant',
+        parameters: {
+          mass: 80,
+          radius: 8,
+          temperature: 150,
+          orbitalDistance: 5,
+          atmosphere: 90,
+          composition: 10,
+          brightness: 0.8
+        }
+      },
+      {
+        name: 'Ice Giant',
+        parameters: {
+          mass: 15,
+          radius: 4,
+          temperature: 75,
+          orbitalDistance: 20,
+          atmosphere: 50,
+          composition: 80,
+          brightness: 0.6
+        }
+      },
+      {
+        name: 'Desert World',
+        parameters: {
+          mass: 0.8,
+          radius: 0.9,
+          temperature: 450,
+          orbitalDistance: 0.7,
+          atmosphere: 0.5,
+          composition: 5,
+          brightness: 1.2
         }
       }
     ];
