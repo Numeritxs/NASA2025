@@ -1,0 +1,58 @@
+{
+  "app.title": "Benvingut a Exia!",
+  "app.description": "Explora planetes i juga al joc de classificació d'exoplanetes.",
+  "app.start": "Start",
+
+  "navigation.home": "Inici",
+  "navigation.play": "Jugar",
+
+  "game.description": "Classifica exoplanetes basant-te en les seves característiques",
+  "game.start": "Start",
+  "game.restart": "Reiniciar",
+  "game.score": "Puntuació",
+  "game.level": "Nivell",
+
+  "planet.earth": "Terra",
+  "planet.mars": "Mart",
+  "planet.jupiter": "Júpiter",
+  "planet.sun": "Sol",
+  "planet.uranus": "Urà",
+
+  "language.catalan": "Català",
+  "language.galician": "Galego",
+  "language.spanish": "Español",
+  "language.english": "English",
+  
+  "game.error.loading": "Error en carregar el joc",
+  "game.error.refresh": "Si us plau, recarrega la pàgina per intentar-ho de nou.",
+  
+  "game.title": "Classificador d'Exoplanetes",
+  "game.target": "Objectiu",
+  "game.attempts": "Intents",
+  "game.similarity": "Semblança",
+  "game.classification.result": "Resultat de Classificació",
+  "game.similarity.feedback": "Semblança de Paràmetres amb l'Objectiu",
+  "game.similarity.explanation": "Això mostra com de prop estan els teus valors de paràmetres específics dels valors del planeta objectiu.",
+  "game.other.possibilities": "Altres Possibilitats",
+  "game.congratulations": "Felicitats! Classificares correctament com",
+  "game.play.again": "Jugar de Nou",
+  "game.feedback.close": "A prop! Ets molt semblant a l'objectiu, però tracta de fer coincidir la classificació.",
+  "game.feedback.good": "Bé! T'estàs acostant!",
+  "game.feedback.fair": "Regular. Intenta ajustar alguns paràmetres.",
+  "game.feedback.poor": "Continua intentant! Encara estàs lluny de l'objectiu.",
+  
+  "planet.earth-like": "Tipus Terra",
+  "planet.earth-like.desc": "Un planeta terrestre amb aigua líquida i una atmosfera respirable",
+  "planet.super-earth": "Súper Terra",
+  "planet.super-earth.desc": "Un planeta terrestre més gran, potencialment habitable",
+  "planet.ocean-world": "Món Oceànic",
+  "planet.ocean-world.desc": "Un planeta completament cobert per un oceà global profund",
+  "planet.hot-jupiter": "Júpiter Calent",
+  "planet.hot-jupiter.desc": "Un gegant gasós que orbita molt a prop de la seva estrella",
+  "planet.gas-giant": "Gegant Gasós",
+  "planet.gas-giant.desc": "Un planeta gran compost principalment d'hidrogen i heli",
+  "planet.ice-giant": "Gegant de Gel",
+  "planet.ice-giant.desc": "Un planeta compost de gel, aigua i altres volàtils",
+  "planet.desert-world": "Món Desèrtic",
+  "planet.desert-world.desc": "Un planeta sec i àrid amb poca o cap aigua"
+}
