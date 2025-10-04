@@ -111,6 +111,9 @@ export class ExoplanetGame {
     console.log('Slider initialized successfully');
     
     this.updateTargetDescription();
+    
+    // Hide right panel toggle initially (no feedback yet)
+    this.hideRightPanelToggle();
   }
 
   private setupSpaceScene() {
@@ -140,17 +143,21 @@ export class ExoplanetGame {
   private setupPanelToggles() {
     const leftToggle = this.container.querySelector('#left-toggle') as HTMLElement;
     const rightToggle = this.container.querySelector('#right-toggle') as HTMLElement;
-    const leftPanel = this.container.querySelector('#left-panel-content') as HTMLElement;
-    const rightPanel = this.container.querySelector('#right-panel-content') as HTMLElement;
+    const leftPanelContent = this.container.querySelector('#left-panel-content') as HTMLElement;
+    const rightPanelContent = this.container.querySelector('#right-panel-content') as HTMLElement;
+    const leftPanel = leftToggle.closest('.left-panel') as HTMLElement;
+    const rightPanel = rightToggle.closest('.right-panel') as HTMLElement;
 
     // Left panel toggle
     leftToggle.addEventListener('click', () => {
       const isOpen = leftPanel.classList.contains('open');
       if (isOpen) {
         leftPanel.classList.remove('open');
+        leftPanelContent.classList.remove('open');
         leftToggle.querySelector('.arrow')!.textContent = '▶';
       } else {
         leftPanel.classList.add('open');
+        leftPanelContent.classList.add('open');
         leftToggle.querySelector('.arrow')!.textContent = '◀';
       }
     });
@@ -160,9 +167,11 @@ export class ExoplanetGame {
       const isOpen = rightPanel.classList.contains('open');
       if (isOpen) {
         rightPanel.classList.remove('open');
+        rightPanelContent.classList.remove('open');
         rightToggle.querySelector('.arrow')!.textContent = '◀';
       } else {
         rightPanel.classList.add('open');
+        rightPanelContent.classList.add('open');
         rightToggle.querySelector('.arrow')!.textContent = '▶';
       }
     });
@@ -327,6 +336,9 @@ export class ExoplanetGame {
 
     this.feedbackContainer.innerHTML = feedbackHTML;
 
+    // Show right panel toggle when feedback is available
+    this.showRightPanelToggle();
+
     // Add restart button listener
     const restartBtn = this.feedbackContainer.querySelector('#restart-btn') as HTMLButtonElement;
     if (restartBtn) {
@@ -364,6 +376,33 @@ export class ExoplanetGame {
     this.updateUI();
     this.updatePlanetVisualization();
     this.feedbackContainer.innerHTML = '';
+    
+    // Hide right panel toggle when no feedback
+    this.hideRightPanelToggle();
+  }
+
+  private showRightPanelToggle() {
+    const rightToggle = this.container.querySelector('#right-toggle') as HTMLElement;
+    if (rightToggle) {
+      rightToggle.style.display = 'flex';
+    }
+  }
+
+  private hideRightPanelToggle() {
+    const rightToggle = this.container.querySelector('#right-toggle') as HTMLElement;
+    const rightPanel = rightToggle?.closest('.right-panel') as HTMLElement;
+    const rightPanelContent = this.container.querySelector('#right-panel-content') as HTMLElement;
+    
+    if (rightToggle) {
+      rightToggle.style.display = 'none';
+    }
+    
+    // Close the panel if it's open
+    if (rightPanel && rightPanel.classList.contains('open')) {
+      rightPanel.classList.remove('open');
+      rightPanelContent.classList.remove('open');
+      rightToggle.querySelector('.arrow')!.textContent = '◀';
+    }
   }
 
   public getGameState(): GameState {
