@@ -157,7 +157,7 @@ body {
 }
 
 .right-panel.open .panel-toggle {
-  right: 380px; /* Se pega al borde izquierdo del contenido interno (400px - 20px panel padding) */
+  right: 400px; /* Se pega al borde izquierdo del panel-content */
 }
 
 .panel-toggle:hover {
@@ -178,9 +178,8 @@ body {
   left: 0;
   width: 400px;
   height: 100%;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(100, 181, 246, 0.05);
   border-radius: 0 12px 12px 0;
-  padding: 20px;
   transform: translateX(-100%);
   opacity: 0;
   visibility: hidden;
@@ -193,17 +192,38 @@ body {
   align-items: center;
 }
 
+.left-panel .panel-content {
+  height: 65vh;
+  top: 50%;
+  transform: translateX(-100%) translateY(-50%);
+  border: 2px solid #64b5f6;
+  border-left: none;
+}
+
 .right-panel .panel-content {
   right: 0;
   left: auto;
   border-radius: 12px 0 0 12px;
   transform: translateX(100%);
+  height: 65vh;
+  top: 50%;
+  transform: translateX(100%) translateY(-50%);
+  border: 2px solid #64b5f6;
+  border-right: none;
 }
 
 .panel-content.open {
   transform: translateX(0);
   opacity: 1;
   visibility: visible;
+}
+
+.left-panel .panel-content.open {
+  transform: translateX(0) translateY(-50%);
+}
+
+.right-panel .panel-content.open {
+  transform: translateX(0) translateY(-50%);
 }
 
 /* Slider Styles */
@@ -239,6 +259,7 @@ body {
 #slider-container {
   width: 100%;
   height: 100%;
+  padding: 20px;
   display: flex;
   flex-direction: column;
 }
@@ -321,9 +342,6 @@ body {
 .feedback-section {
   margin-top: 20px;
   padding: 20px;
-  background: rgba(100, 181, 246, 0.05);
-  border-radius: 8px;
-  border: 2px solid #64b5f6;
 }
 
 .feedback-section h4 {
@@ -546,7 +564,7 @@ body {
   }
   
   .left-panel.open .panel-toggle {
-    left: 350px; /* Se pega al borde derecho del panel en tablet */
+    left: 350px; /* Se pega al borde derecho del panel-content en tablet */
   }
   
   .right-panel.open {
@@ -554,11 +572,19 @@ body {
   }
   
   .right-panel.open .panel-toggle {
-    right: 330px; /* Se pega al borde izquierdo del contenido interno en tablet */
+    right: 350px; /* Se pega al borde izquierdo del panel-content en tablet */
   }
   
   .panel-content {
     width: 350px;
+  }
+  
+  .left-panel .panel-content {
+    height: 60vh;
+  }
+  
+  .right-panel .panel-content {
+    height: 60vh;
   }
   
   .game-info {
@@ -577,7 +603,7 @@ body {
   }
   
   .left-panel.open .panel-toggle {
-    left: 280px; /* Se pega al borde derecho del panel en móvil */
+    left: 280px; /* Se pega al borde derecho del panel-content en móvil */
   }
   
   .right-panel.open {
@@ -585,11 +611,19 @@ body {
   }
   
   .right-panel.open .panel-toggle {
-    right: 260px; /* Se pega al borde izquierdo del contenido interno en móvil (280px - 20px panel padding) */
+    right: 280px; /* Se pega al borde izquierdo del panel-content en móvil */
   }
   
   .panel-content {
     width: 280px;
+  }
+  
+  .left-panel .panel-content {
+    height: 55vh;
+  }
+  
+  .right-panel .panel-content {
+    height: 55vh;
   }
   
   .slider-group {
