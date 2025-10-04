@@ -10,12 +10,16 @@ let gameInstance: ExoplanetGameType | null = null;
 /**
  * Initialize the Exoplanet Game in a container
  */
-export function initializeGame(container: HTMLElement): ExoplanetGameType {
+export function initializeGame(container: HTMLElement, translateFunction?: (key: string) => string): ExoplanetGameType {
   if (gameInstance) {
     gameInstance = null; // Clean up previous instance
   }
   
-  gameInstance = new ExoplanetGame(container);
+  // Default translation function that returns the key if no translation provided
+  const defaultTranslate = (key: string) => key;
+  const t = translateFunction || defaultTranslate;
+  
+  gameInstance = new ExoplanetGame(container, t);
   return gameInstance;
 }
 
