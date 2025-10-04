@@ -4,6 +4,7 @@ import { ExoplanetClassifier } from './ExoplanetClassifier';
 import type { ExoplanetType } from './ExoplanetClassifier';
 import { SpaceScene } from '../components/SpaceScene/SpaceScene';
 import { Planet } from '../components/CelestialBodies/Planet';
+import { getTopClassificationConfig, type PlanetConfig } from './PlanetConfigs';
 
 export interface GameState {
   targetExoplanet: {
@@ -46,7 +47,8 @@ export class ExoplanetGame {
         temperature: 288,
         orbitalDistance: 1,
         atmosphere: 1,
-        composition: 70
+        composition: 70,
+        brightness: 1.0
       },
       lastClassification: [],
       similarity: 0,
@@ -111,9 +113,6 @@ export class ExoplanetGame {
     console.log('Slider initialized successfully');
     
     this.updateTargetDescription();
-    
-    // Hide right panel toggle initially (no feedback yet)
-    this.hideRightPanelToggle();
   }
 
   private setupSpaceScene() {
@@ -143,21 +142,17 @@ export class ExoplanetGame {
   private setupPanelToggles() {
     const leftToggle = this.container.querySelector('#left-toggle') as HTMLElement;
     const rightToggle = this.container.querySelector('#right-toggle') as HTMLElement;
-    const leftPanelContent = this.container.querySelector('#left-panel-content') as HTMLElement;
-    const rightPanelContent = this.container.querySelector('#right-panel-content') as HTMLElement;
-    const leftPanel = leftToggle.closest('.left-panel') as HTMLElement;
-    const rightPanel = rightToggle.closest('.right-panel') as HTMLElement;
+    const leftPanel = this.container.querySelector('#left-panel-content') as HTMLElement;
+    const rightPanel = this.container.querySelector('#right-panel-content') as HTMLElement;
 
     // Left panel toggle
     leftToggle.addEventListener('click', () => {
       const isOpen = leftPanel.classList.contains('open');
       if (isOpen) {
         leftPanel.classList.remove('open');
-        leftPanelContent.classList.remove('open');
         leftToggle.querySelector('.arrow')!.textContent = '▶';
       } else {
         leftPanel.classList.add('open');
-        leftPanelContent.classList.add('open');
         leftToggle.querySelector('.arrow')!.textContent = '◀';
       }
     });
@@ -167,11 +162,9 @@ export class ExoplanetGame {
       const isOpen = rightPanel.classList.contains('open');
       if (isOpen) {
         rightPanel.classList.remove('open');
-        rightPanelContent.classList.remove('open');
         rightToggle.querySelector('.arrow')!.textContent = '◀';
       } else {
         rightPanel.classList.add('open');
-        rightPanelContent.classList.add('open');
         rightToggle.querySelector('.arrow')!.textContent = '▶';
       }
     });
@@ -193,26 +186,94 @@ export class ExoplanetGame {
   }
 
   private updatePlanetVisualization() {
-    // Clear existing planets
+    // Clear existing objects
     this.spaceScene.objects.forEach(obj => {
-      this.spaceScene.scene.remove(obj.mesh);
+      this.spaceScene.removeObject(obj);
     });
     this.spaceScene.objects = [];
 
-    // Create planet based on current parameters
-    const size = Math.max(0.5, Math.min(2, this.gameState.currentGuess.radius));
-    const color = this.getPlanetColor();
+    // Create enhanced celestial body based on current parameters
+    const size = Math.max(0.5, Math.min(3, this.gameState.currentGuess.radius));
+    const { temperature, composition, atmosphere, mass, brightness } = this.gameState.currentGuess;
+    
+    // Determine if it's a star or planet based on mass and temperature
+    const isStar = mass > 10 || temperature > 1000;
+    
+    // Get planet configuration based on last classification if available
+    let planetConfig: PlanetConfig | null = null;
+    if (this.gameState.lastClassification.length > 0) {
+      planetConfig = getTopClassificationConfig(this.gameState.lastClassification);
+    }
+    
+    if (isStar) {
+      this.createStar(size, temperature, brightness);
+    } else {
+      this.createEnhancedPlanet(size, temperature, composition, atmosphere, brightness, planetConfig);
+    }
+  }
+
+  private createStar(size: number, temperature: number, brightness: number) {
+    const starColor = this.getStarColor(temperature);
+    const star = new Planet(
+      'Current Star',
+      size,
+      {
+        color: starColor,
+        temperature: temperature,
+        brightness: brightness,
+      },
+      0.02, // Rotación más rápida para estrellas
+      0,    // Sin órbita
+      0     // En el centro
+    );
+    
+    // Agregar luz de estrella con brillo ajustable
+    if (star.light) {
+      star.light.intensity = 2.5 * brightness;
+      star.light.distance = 50;
+    }
+    
+    this.spaceScene.addObject(star);
+  }
+
+  private createEnhancedPlanet(size: number, temperature: number, composition: number, atmosphere: number, brightness: number, planetConfig: PlanetConfig | null) {
+    const planetColor = this.getPlanetColor();
+    
+    // Usar configuración del planeta si está disponible
+    const config = planetConfig || null;
     
     const planet = new Planet(
-      'Current Guess',
+      'Current Planet',
       size,
-      { color },
+      {
+        color: planetColor,
+        textureUrl: config?.textureUrl, // Use texture from config
+        temperature: temperature,
+        composition: composition,
+        atmosphere: atmosphere,
+        brightness: brightness,
+        planetConfig: config
+      },
       0.01,
-      0.002,
-      8
+      0, // Sin órbita para visualización individual
+      0  // En el centro
     );
     
     this.spaceScene.addObject(planet);
+  }
+
+  private getStarColor(temperature: number): number {
+    if (temperature < 3000) {
+      return 0xff4500; // Enana roja
+    } else if (temperature < 5000) {
+      return 0xffa500; // Estrella naranja
+    } else if (temperature < 6000) {
+      return 0xffff00; // Estrella amarilla (como el Sol)
+    } else if (temperature < 10000) {
+      return 0xffffff; // Estrella blanca
+    } else {
+      return 0x87ceeb; // Gigante azul
+    }
   }
 
   private getPlanetColor(): number {
@@ -267,14 +328,17 @@ export class ExoplanetGame {
       );
     }
 
-    // Check if won
-    if (this.gameState.similarity >= 0.8) {
+    // Check if won - top classification matches target
+    const topClassification = this.gameState.lastClassification[0];
+    if (topClassification && topClassification.name === this.gameState.targetExoplanet.name) {
       this.gameState.gameWon = true;
-      this.showWinMessage();
     }
 
     this.updateUI();
     this.showFeedback();
+    
+    // Update planet visualization with new classification
+    this.updatePlanetVisualization();
   }
 
   private async sendToBackend(parameters: ExoplanetParameters) {
@@ -318,7 +382,8 @@ export class ExoplanetGame {
         </div>
         
         <div class="similarity-feedback">
-          <h5>Similarity to Target: ${Math.round(this.gameState.similarity * 100)}%</h5>
+          <h5>Parameter Similarity to Target: ${Math.round(this.gameState.similarity * 100)}%</h5>
+          <p class="similarity-explanation">This shows how close your specific parameter values are to the target planet's values.</p>
           ${this.getSimilarityMessage()}
         </div>
         
@@ -336,9 +401,6 @@ export class ExoplanetGame {
 
     this.feedbackContainer.innerHTML = feedbackHTML;
 
-    // Show right panel toggle when feedback is available
-    this.showRightPanelToggle();
-
     // Add restart button listener
     const restartBtn = this.feedbackContainer.querySelector('#restart-btn') as HTMLButtonElement;
     if (restartBtn) {
@@ -350,11 +412,13 @@ export class ExoplanetGame {
 
   private getSimilarityMessage(): string {
     const similarity = this.gameState.similarity;
+    const topClassification = this.gameState.lastClassification[0];
+    const isCorrectClassification = topClassification && topClassification.name === this.gameState.targetExoplanet.name;
     
-    if (similarity >= 0.99) {
-      return '<div class="similarity-perfect">🎯 Perfect! It\'s an almost exact match! <button id="restart-btn" class="play-again-btn">🎉 Play Again</button></div>';
+    if (isCorrectClassification) {
+      return '<div class="similarity-perfect">🎯 Congratulations! You correctly classified it as a ' + this.gameState.targetExoplanet.name + '! <button id="restart-btn" class="play-again-btn">🎉 Play Again</button></div>';
     } else if (similarity >= 0.8) {
-      return '<div class="similarity-excellent">Excellent! Very close to the target! <button id="restart-btn" class="play-again-btn">🎉 Play Again</button></div>';
+      return '<div class="similarity-excellent">Close! You\'re very similar to the target, but try to match the classification.</div>';
     } else if (similarity >= 0.6) {
       return '<div class="similarity-good">Good! You\'re getting closer!</div>';
     } else if (similarity >= 0.4) {
@@ -364,10 +428,7 @@ export class ExoplanetGame {
     }
   }
 
-  private showWinMessage() {
-    // Could add confetti or other celebration effects here
-    console.log('Game won!');
-  }
+
 
   private restartGame() {
     this.gameState = this.initializeGame();
@@ -376,33 +437,6 @@ export class ExoplanetGame {
     this.updateUI();
     this.updatePlanetVisualization();
     this.feedbackContainer.innerHTML = '';
-    
-    // Hide right panel toggle when no feedback
-    this.hideRightPanelToggle();
-  }
-
-  private showRightPanelToggle() {
-    const rightToggle = this.container.querySelector('#right-toggle') as HTMLElement;
-    if (rightToggle) {
-      rightToggle.style.display = 'flex';
-    }
-  }
-
-  private hideRightPanelToggle() {
-    const rightToggle = this.container.querySelector('#right-toggle') as HTMLElement;
-    const rightPanel = rightToggle?.closest('.right-panel') as HTMLElement;
-    const rightPanelContent = this.container.querySelector('#right-panel-content') as HTMLElement;
-    
-    if (rightToggle) {
-      rightToggle.style.display = 'none';
-    }
-    
-    // Close the panel if it's open
-    if (rightPanel && rightPanel.classList.contains('open')) {
-      rightPanel.classList.remove('open');
-      rightPanelContent.classList.remove('open');
-      rightToggle.querySelector('.arrow')!.textContent = '◀';
-    }
   }
 
   public getGameState(): GameState {
