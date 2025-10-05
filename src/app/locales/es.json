@@ -1,0 +1,52 @@
+{
+  "app.title": "¡Bienvenido a Exia!",
+  "app.description": "Explora planetas y juega al juego de clasificación de exoplanetas.",
+  "app.start": "Start",
+
+  "navigation.home": "Inicio",
+  "navigation.play": "Jugar",
+
+  "planet.earth": "Tierra",
+  "planet.mars": "Marte",
+  "planet.jupiter": "Júpiter",
+  "planet.sun": "Sol",
+  "planet.uranus": "Urano",
+
+  "language.catalan": "Català",
+  "language.galician": "Galego",
+  "language.spanish": "Español",
+  "language.english": "English",
+  
+  "game.error.loading": "Error al cargar el juego",
+  "game.error.refresh": "Por favor, recarga la página para intentar de nuevo.",
+  
+  "game.title": "Juego de Clasificación de Exoplanetas",
+  "game.target": "Objetivo",
+  "game.attempts": "Intentos",
+  "game.similarity": "Similitud",
+  "game.classification.result": "Resultado de Clasificación",
+  "game.similarity.feedback": "Similitud de Parámetros con el Objetivo",
+  "game.similarity.explanation": "Esto muestra qué tan cerca están tus valores de parámetros específicos de los valores del planeta objetivo.",
+  "game.other.possibilities": "Otras Posibilidades",
+  "game.congratulations": "¡Felicidades! Clasificaste correctamente como",
+  "game.play.again": "Jugar de Nuevo",
+  "game.feedback.close": "¡Cerca! Eres muy similar al objetivo, pero trata de hacer coincidir la clasificación.",
+  "game.feedback.good": "¡Bien! Te estás acercando!",
+  "game.feedback.fair": "Regular. Intenta ajustar algunos parámetros.",
+  "game.feedback.poor": "¡Sigue intentando! Aún estás lejos del objetivo.",
+  
+  "planet.earth-like": "Tipo Tierra",
+  "planet.earth-like.desc": "Un planeta terrestre con agua líquida y una atmósfera respirable",
+  "planet.super-earth": "Súper Tierra",
+  "planet.super-earth.desc": "Un planeta terrestre más grande, potencialmente habitable",
+  "planet.ocean-world": "Mundo Oceánico",
+  "planet.ocean-world.desc": "Un planeta completamente cubierto por un océano global profundo",
+  "planet.hot-jupiter": "Júpiter Caliente",
+  "planet.hot-jupiter.desc": "Un gigante gaseoso que orbita muy cerca de su estrella",
+  "planet.gas-giant": "Gigante Gaseoso",
+  "planet.gas-giant.desc": "Un planeta grande compuesto principalmente de hidrógeno y helio",
+  "planet.ice-giant": "Gigante de Hielo",
+  "planet.ice-giant.desc": "Un planeta compuesto de hielo, agua y otros volátiles",
+  "planet.desert-world": "Mundo Desértico",
+  "planet.desert-world.desc": "Un planeta seco y árido con poca o nada de agua"
+}

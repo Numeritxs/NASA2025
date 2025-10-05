@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import HomeButton from "./components/HomeButton"
+import { I18nProvider } from "./components/I18nProvider"
+import { LanguageSwitcher } from "./components/LanguageSwitcher"
 
 
 const geistSans = Geist({
@@ -29,8 +31,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <HomeButton />
-        {children}
+        <I18nProvider>
+          <HomeButton />
+          <LanguageSwitcher />
+          {children}
+        </I18nProvider>
       </body>
     </html>
   );

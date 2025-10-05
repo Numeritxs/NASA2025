@@ -1,9 +1,11 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import { useI18n } from "../components/I18nProvider"
 
 export default function ShowcasePage() {
   const containerRef = useRef<HTMLDivElement>(null)
+  const { t } = useI18n()
 
   useEffect(() => {
     // Dynamic import to avoid SSR issues
@@ -16,16 +18,16 @@ export default function ShowcasePage() {
         if (containerRef.current) {
           containerRef.current.innerHTML = ""
           
-          // Initialize the game using the utility function
-          initializeGame(containerRef.current)
+          // Initialize the game using the utility function with translation
+          initializeGame(containerRef.current, t)
         }
       } catch (error) {
         console.error("Error loading exoplanet game:", error)
         if (containerRef.current) {
           containerRef.current.innerHTML = `
             <div style="padding: 2rem; text-align: center; color: white;">
-              <h2>Error loading the game</h2>
-              <p>Please refresh the page to try again.</p>
+              <h2>${t("game.error.loading")}</h2>
+              <p>${t("game.error.refresh")}</p>
             </div>
           `
         }
@@ -50,7 +52,7 @@ export default function ShowcasePage() {
         containerRef.current.innerHTML = ""
       }
     }
-  }, [])
+  }, [t])
 
   return (
     <div 

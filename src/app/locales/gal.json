@@ -1,0 +1,51 @@
+{
+  "app.title": "EXIA E GALEGA",
+  "app.description": "GALEGO TRANSLATION TESTING",
+  "app.start": "Start",
+  
+  "navigation.home": "",
+  "navigation.play": "",
+  
+  "planet.earth": "",
+  "planet.mars": "",
+  "planet.jupiter": "",
+  "planet.sun": "",
+  "planet.uranus": "",
+  
+  "language.catalan": "Català",
+  "language.galician": "Galego",
+  "language.spanish": "Español",
+  "language.english": "English",
+  
+  "game.error.loading": "",
+  "game.error.refresh": "",
+  
+  "game.target": "",
+  "game.attempts": "",
+  "game.similarity": "",
+  "game.classification.result": "",
+  "game.similarity.feedback": "",
+  "game.similarity.explanation": "",
+  "game.other.possibilities": "",
+  "game.congratulations": "",
+  "game.play.again": "",
+  "game.feedback.close": "",
+  "game.feedback.good": "",
+  "game.feedback.fair": "",
+  "game.feedback.poor": "",
+  
+  "planet.earth-like": "",
+  "planet.earth-like.desc": "",
+  "planet.super-earth": "",
+  "planet.super-earth.desc": "",
+  "planet.ocean-world": "",
+  "planet.ocean-world.desc": "",
+  "planet.hot-jupiter": "",
+  "planet.hot-jupiter.desc": "",
+  "planet.gas-giant": "",
+  "planet.gas-giant.desc": "",
+  "planet.ice-giant": "",
+  "planet.ice-giant.desc": "",
+  "planet.desert-world": "",
+  "planet.desert-world.desc": ""
+}

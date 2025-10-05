@@ -5,6 +5,7 @@ import type { ExoplanetType } from './ExoplanetClassifier';
 import { SpaceScene } from '../components/SpaceScene/SpaceScene';
 import { Planet } from '../components/CelestialBodies/Planet';
 import { getTopClassificationConfig, type PlanetConfig } from './PlanetConfigs';
+import { getPlanetTranslation } from './PlanetTranslations';
 
 export interface GameState {
   targetExoplanet: {
@@ -26,9 +27,11 @@ export class ExoplanetGame {
   private classifier: ExoplanetClassifier;
   private spaceScene!: SpaceScene;
   private feedbackContainer!: HTMLElement;
+  private t: (key: string) => string;
 
-  constructor(container: HTMLElement) {
+  constructor(container: HTMLElement, translateFunction: (key: string) => string) {
     this.container = container;
+    this.t = translateFunction;
     this.classifier = new ExoplanetClassifier();
     this.gameState = this.initializeGame();
     
@@ -62,15 +65,15 @@ export class ExoplanetGame {
     this.container.innerHTML = `
       <div class="game-container">
         <div class="game-header">
-          <h1>Exoplanet Classification Game</h1>
+          <h1>${this.t("game.title")}</h1>
           <div class="game-info">
             <div class="target-info">
-              <h3>Target: <span id="target-name">${this.gameState.targetExoplanet.name}</span></h3>
+              <h3>${this.t("game.target")}: <span id="target-name">${this.t(getPlanetTranslation(this.gameState.targetExoplanet.name, 'name'))}</span></h3>
               <p id="target-description"></p>
             </div>
             <div class="game-stats">
-              <div>Attempts: <span id="attempts">${this.gameState.attempts}</span>/<span id="max-attempts">${this.gameState.maxAttempts}</span></div>
-              <div>Similarity: <span id="similarity">0%</span></div>
+              <div>${this.t("game.attempts")}: <span id="attempts">${this.gameState.attempts}</span>/<span id="max-attempts">${this.gameState.maxAttempts}</span></div>
+              <div>${this.t("game.similarity")}: <span id="similarity">0%</span></div>
             </div>
           </div>
         </div>
@@ -183,14 +186,14 @@ export class ExoplanetGame {
     const targetName = this.container.querySelector('#target-name') as HTMLElement;
     const targetDesc = this.container.querySelector('#target-description') as HTMLElement;
     
-    targetName.textContent = this.gameState.targetExoplanet.name;
+    targetName.textContent = this.t(getPlanetTranslation(this.gameState.targetExoplanet.name, 'name'));
     
     // Get description from classifier
     const allTypes = this.classifier.classify(this.gameState.targetExoplanet.parameters);
     const targetType = allTypes.find(type => type.name === this.gameState.targetExoplanet.name);
     
     if (targetType) {
-      targetDesc.textContent = targetType.description;
+      targetDesc.textContent = this.t(getPlanetTranslation(this.gameState.targetExoplanet.name, 'desc'));
     }
   }
 
@@ -382,25 +385,25 @@ export class ExoplanetGame {
     
     let feedbackHTML = `
       <div class="feedback-section">
-        <h4>Classification Result</h4>
+        <h4>${this.t("game.classification.result")}</h4>
         <div class="classification-result">
           <div class="top-result">
-            <strong>${topClassification.name}</strong> (${Math.round(topClassification.probability * 100)}% match)
+            <strong>${this.t(getPlanetTranslation(topClassification.name, 'name'))}</strong> (${Math.round(topClassification.probability * 100)}% match)
           </div>
-          <p>${topClassification.description}</p>
+          <p>${this.t(getPlanetTranslation(topClassification.name, 'desc'))}</p>
         </div>
         
         <div class="similarity-feedback">
-          <h5>Parameter Similarity to Target: ${Math.round(this.gameState.similarity * 100)}%</h5>
-          <p class="similarity-explanation">This shows how close your specific parameter values are to the target planet's values.</p>
+          <h5>${this.t("game.similarity.feedback")}: ${Math.round(this.gameState.similarity * 100)}%</h5>
+          <p class="similarity-explanation">${this.t("game.similarity.explanation")}</p>
           ${this.getSimilarityMessage()}
         </div>
         
         ${this.gameState.lastClassification.length > 1 ? `
           <div class="other-classifications">
-            <h5>Other Possibilities:</h5>
+            <h5>${this.t("game.other.possibilities")}:</h5>
             ${this.gameState.lastClassification.slice(1, 4).map(type => 
-              `<div>${type.name} (${Math.round(type.probability * 100)}%)</div>`
+              `<div>${this.t(getPlanetTranslation(type.name, 'name'))} (${Math.round(type.probability * 100)}%)</div>`
             ).join('')}
           </div>
         ` : ''}
@@ -428,15 +431,15 @@ export class ExoplanetGame {
     const isCorrectClassification = topClassification && topClassification.name === this.gameState.targetExoplanet.name;
     
     if (isCorrectClassification) {
-      return '<div class="similarity-perfect">🎯 Congratulations! You correctly classified it as a ' + this.gameState.targetExoplanet.name + '! <button id="restart-btn" class="play-again-btn">🎉 Play Again</button></div>';
+      return '<div class="similarity-perfect">🎯 ' + this.t("game.congratulations") + ' ' + this.t(getPlanetTranslation(this.gameState.targetExoplanet.name, 'name')) + '! <button id="restart-btn" class="play-again-btn">🎉 ' + this.t("game.play.again") + '</button></div>';
     } else if (similarity >= 0.8) {
-      return '<div class="similarity-excellent">Close! You\'re very similar to the target, but try to match the classification.</div>';
+      return '<div class="similarity-excellent">' + this.t("game.feedback.close") + '</div>';
     } else if (similarity >= 0.6) {
-      return '<div class="similarity-good">Good! You\'re getting closer!</div>';
+      return '<div class="similarity-good">' + this.t("game.feedback.good") + '</div>';
     } else if (similarity >= 0.4) {
-      return '<div class="similarity-fair">Fair. Try adjusting some parameters.</div>';
+      return '<div class="similarity-fair">' + this.t("game.feedback.fair") + '</div>';
     } else {
-      return '<div class="similarity-poor">Keep trying! You\'re still far from the target.</div>';
+      return '<div class="similarity-poor">' + this.t("game.feedback.poor") + '</div>';
     }
   }
 
