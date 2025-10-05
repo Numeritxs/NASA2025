@@ -36,6 +36,9 @@
   "game.feedback.fair": "Fair. Try adjusting some parameters.",
   "game.feedback.poor": "Keep trying! You're still far from the target.",
   "game.feedback.correct_but_low_confidence": "Correct classification, but low confidence",
+  "game.feedback.real_planet_found": "🎉 There is a planet just like that one! Scientists have discovered a real exoplanet that matches this description you gave us before. Check it out: <a href='https://exoplanetarchive.ipac.caltech.edu/overview/11%20Com%20b#planet_11-Com-b_collapsible' target='_blank' rel='noopener noreferrer' class='planet-link'>11 Com b</a>",
+  "game.feedback.new_planet_discovered": "🔍 There is a new planet found that matches this description you gave us before! This discovery could be the next breakthrough in exoplanet research. Learn more: <a href='https://exoplanetarchive.ipac.caltech.edu/overview/11%20Com%20b#planet_11-Com-b_collapsible' target='_blank' rel='noopener noreferrer' class='planet-link'>11 Com b</a>",
+  "game.feedback.no_planet_discovered": "🌟 There is no planet like this one discovered yet! If we find it, we will let you know. You've described something truly unique in the universe!",
   
   "planet.earth-like": "Earth-like",
   "planet.earth-like.desc": "A terrestrial planet with liquid water and a breathable atmosphere",
