@@ -43,7 +43,7 @@ export function getGameState(): GameState | null {
 export function restartGame(): void {
   if (gameInstance) {
     // Access private method through any type casting
-    (gameInstance as any).restartGame();
+    (gameInstance as ExoplanetGame & { restartGame(): void }).restartGame();
   }
 }
 

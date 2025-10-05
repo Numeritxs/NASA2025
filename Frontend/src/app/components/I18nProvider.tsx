@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useMemo, useState, ReactNode, useEffect, useRef } from "react"
+import { createContext, useContext, useMemo, useState, ReactNode, useEffect } from "react"
 import cat from "../locales/cat.json"
 import gal from "../locales/gal.json"
 import en from "../locales/en.json"

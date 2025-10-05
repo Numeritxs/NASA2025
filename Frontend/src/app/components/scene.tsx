@@ -11,11 +11,11 @@ import { Html } from "@react-three/drei"
 
 
 
-type Hotspot = {
-    position: [number, number, number]
-    title: string
-    description: string
-}
+// type Hotspot = {
+//     position: [number, number, number]
+//     title: string
+//     description: string
+// }
 
 type Hotspot2D = {
     screenPosition: [number, number]

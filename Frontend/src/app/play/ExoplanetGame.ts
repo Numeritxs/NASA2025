@@ -157,7 +157,7 @@ export class ExoplanetGame {
     }, 100);
   }
 
-  private convertToExoplanetTypes(classifications: any[]): ExoplanetType[] {
+  private convertToExoplanetTypes(classifications: { name: string; probability: number; description: string }[]): ExoplanetType[] {
     // Get default characteristics for each exoplanet type from the classifier
     const defaultCharacteristics = {
       'Earth-like': {
@@ -510,7 +510,7 @@ export class ExoplanetGame {
     const topClassification = this.gameState.lastClassification[0];
     console.log('Game: topClassification:', topClassification);
     
-    let feedbackHTML = `
+    const feedbackHTML = `
       <div class="feedback-section">
         <h4>${this.t("game.classification.result")}</h4>
         <div class="classification-result">

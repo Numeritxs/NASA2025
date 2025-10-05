@@ -136,7 +136,7 @@ export class ExoplanetAPI {
   }
 
   // Convert frontend parameters to backend format
-  convertGameParametersToBackend(parameters: any): ExoplanetData {
+  convertGameParametersToBackend(parameters: { radius: number; temperature: number; orbitalDistance: number; mass: number; brightness: number }): ExoplanetData {
     console.log('API: Converting frontend parameters:', parameters);
     
     // Calculate orbital period from orbital distance using Kepler's laws

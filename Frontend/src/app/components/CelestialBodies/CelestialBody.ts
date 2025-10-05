@@ -144,7 +144,7 @@ export abstract class CelestialBody {
     return Math.max(0, Math.min(0.8, (100 - composition) / 100));
   }
 
-  private createStarEffects(options: any): void {
+  private createStarEffects(options: { color?: number; temperature?: number; brightness?: number }): void {
     // Efecto de corona más prominente para estrellas
     for (let i = 1; i <= 4; i++) {
       const coronaGeometry = new THREE.SphereGeometry(this.radius * (1 + i * 0.2), 32, 32);
@@ -170,14 +170,14 @@ export abstract class CelestialBody {
     (this.mesh.material as THREE.MeshStandardMaterial).metalness = 0.0;
   }
 
-  private createPlanetEffects(options: any): void {
+  private createPlanetEffects(options: { atmosphere?: number; temperature?: number; planetConfig?: { visualProperties?: any } }): void {
     // Crear atmósfera si tiene
     if (options.atmosphere && options.atmosphere > 0.1) {
       this.createAtmosphere(options);
     }
   }
 
-  private createAtmosphere(options: any): void {
+  private createAtmosphere(options: { temperature?: number; planetConfig?: { visualProperties?: any } }): void {
     const atmosphereGeometry = new THREE.SphereGeometry(this.radius * 1.08, 64, 64);
     const visualProps = options.planetConfig?.visualProperties;
     const atmosphereColor = visualProps?.atmosphereColor ?? this.getAtmosphereColor(options.temperature || 288);

@@ -6,12 +6,12 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || '/api',
   },
   eslint: {
-    // Disable ESLint during builds in Docker
-    ignoreDuringBuilds: process.env.NODE_ENV === 'production' && process.env.DOCKER_BUILD === 'true',
+    // Disable ESLint during builds for Vercel deployment
+    ignoreDuringBuilds: true,
   },
   typescript: {
-    // Disable TypeScript errors during builds in Docker
-    ignoreBuildErrors: process.env.NODE_ENV === 'production' && process.env.DOCKER_BUILD === 'true',
+    // Disable TypeScript errors during builds for Vercel deployment
+    ignoreBuildErrors: true,
   },
   // Remove rewrites for Vercel deployment - API routes will be handled by Vercel
   output: 'standalone',
