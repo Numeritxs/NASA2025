@@ -30,6 +30,7 @@
   "game.other.possibilities": "Other Possibilities",
   "game.congratulations": "Congratulations! You correctly classified it as a",
   "game.play.again": "Play Again",
+  "game.restart": "Restart Game",
   "game.feedback.close": "Close! You're very similar to the target, but try to match the classification.",
   "game.feedback.good": "Good! You're getting closer!",
   "game.feedback.fair": "Fair. Try adjusting some parameters.",

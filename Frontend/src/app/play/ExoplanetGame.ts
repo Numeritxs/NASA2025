@@ -436,12 +436,30 @@ export class ExoplanetGame {
       this.gameState.similarity = topClassification ? topClassification.probability : 0;
       console.log('Game: Updated similarity:', this.gameState.similarity);
       
-      // Check if won - top classification matches target AND confidence > 80%
-      if (topClassification && 
-          topClassification.name === this.gameState.targetExoplanet.name && 
-          topClassification.probability >= 0.8) {
-        this.gameState.gameWon = true;
-        console.log('Game: Game won!');
+      // Debug: Log target and classifications for comparison
+      console.log('Game: Target exoplanet:', this.gameState.targetExoplanet.name);
+      console.log('Game: All classifications:', this.gameState.lastClassification.map(c => `${c.name} (${Math.round(c.probability * 100)}%)`));
+      
+      // Check if won - look for target in top classifications with reasonable confidence
+      const targetClassification = this.gameState.lastClassification.find(
+        c => c.name === this.gameState.targetExoplanet.name
+      );
+      
+      if (targetClassification) {
+        console.log(`Game: Found target "${this.gameState.targetExoplanet.name}" with ${Math.round(targetClassification.probability * 100)}% confidence`);
+        
+        // Win condition: target is in top 2 classifications with >60% confidence, OR top classification with >70% confidence
+        const isTopClassification = targetClassification === topClassification;
+        const isTopTwo = this.gameState.lastClassification.indexOf(targetClassification) < 2;
+        const hasGoodConfidence = targetClassification.probability >= 0.6;
+        const hasHighConfidence = targetClassification.probability >= 0.7;
+        
+        if ((isTopTwo && hasGoodConfidence) || (isTopClassification && hasHighConfidence)) {
+          this.gameState.gameWon = true;
+          console.log('Game: Game won!');
+        }
+      } else {
+        console.log('Game: Target not found in classifications');
       }
       
     } catch (error) {
@@ -453,10 +471,23 @@ export class ExoplanetGame {
         this.gameState.targetExoplanet.parameters
       );
       
-      // Check if won with local classifier
-      const topClassification = this.gameState.lastClassification[0];
-      if (topClassification && topClassification.name === this.gameState.targetExoplanet.name) {
-        this.gameState.gameWon = true;
+      // Check if won with local classifier - use same logic as backend
+      const targetClassification = this.gameState.lastClassification.find(
+        c => c.name === this.gameState.targetExoplanet.name
+      );
+      
+      if (targetClassification) {
+        console.log(`Game: Local classifier found target "${this.gameState.targetExoplanet.name}" with ${Math.round(targetClassification.probability * 100)}% confidence`);
+        
+        const topClassification = this.gameState.lastClassification[0];
+        const isTopClassification = targetClassification === topClassification;
+        const isTopTwo = this.gameState.lastClassification.indexOf(targetClassification) < 2;
+        const hasGoodConfidence = targetClassification.probability >= 0.6;
+        const hasHighConfidence = targetClassification.probability >= 0.7;
+        
+        if ((isTopTwo && hasGoodConfidence) || (isTopClassification && hasHighConfidence)) {
+          this.gameState.gameWon = true;
+        }
       }
     }
 
@@ -495,6 +526,18 @@ export class ExoplanetGame {
             ${this.gameState.lastClassification.slice(1, 4).map(type => 
               `<div>${this.t(getPlanetTranslation(type.name, 'name'))} (${Math.round(type.probability * 100)}%)</div>`
             ).join('')}
+          </div>
+        ` : ''}
+        
+        <!-- Add similarity message with restart button -->
+        <div class="similarity-feedback">
+          ${this.getSimilarityMessage()}
+        </div>
+        
+        <!-- Add general restart button for non-winning cases -->
+        ${!this.gameState.gameWon ? `
+          <div class="game-actions">
+            <button id="restart-btn" class="restart-btn">🔄 ${this.t("game.restart")}</button>
           </div>
         ` : ''}
         

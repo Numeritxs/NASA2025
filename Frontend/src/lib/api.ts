@@ -116,14 +116,19 @@ export class ExoplanetAPI {
   // Map Spanish backend names to English frontend names
   private mapSpanishToEnglishName(spanishName: string): string {
     const nameMap: Record<string, string> = {
+      // Basic types
       'subterrestre': 'Sub Earth',
+      'subterrestre_caliente': 'Desert World', // Hot subterrestrial -> Desert World
       'terraneo': 'Earth-like', 
+      'terraneo_caliente': 'Desert World', // Hot terrestrial -> Desert World
       'super_tierra': 'Super Earth',
+      'super_tierra_caliente': 'Desert World', // Hot super earth -> Desert World
       'mini_neptuno': 'Ice Giant',
+      'mini_neptuno_caliente': 'Hot Jupiter', // Hot mini neptune -> Hot Jupiter
       'neptuniano': 'Ice Giant',
-      'super_jupiter': 'Hot Jupiter',
-      'joviano_caliente': 'Hot Jupiter',
-      'joviano': 'Gas Giant'
+      'neptuniano_caliente': 'Hot Jupiter', // Hot neptunian -> Hot Jupiter
+      'joviano': 'Gas Giant',
+      'joviano_caliente': 'Hot Jupiter'
     };
     
     console.log(`API: Mapping "${spanishName}" to "${nameMap[spanishName] || spanishName}"`);

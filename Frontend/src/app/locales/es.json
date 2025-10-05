@@ -30,6 +30,7 @@
   "game.other.possibilities": "Otras Posibilidades",
   "game.congratulations": "¡Felicidades! Clasificaste correctamente como",
   "game.play.again": "Jugar de Nuevo",
+  "game.restart": "Reiniciar Juego",
   "game.feedback.close": "¡Cerca! Eres muy similar al objetivo, pero trata de hacer coincidir la clasificación.",
   "game.feedback.good": "¡Bien! Te estás acercando!",
   "game.feedback.fair": "Regular. Intenta ajustar algunos parámetros.",
