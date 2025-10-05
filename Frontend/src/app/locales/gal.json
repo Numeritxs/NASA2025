@@ -34,6 +34,10 @@
   "game.feedback.good": "",
   "game.feedback.fair": "",
   "game.feedback.poor": "",
+  "game.feedback.correct_but_low_confidence": "",
+  "game.feedback.real_planet_found": "🎉 Hai un planeta exactamente como ese! Os científicos descubriron un exoplaneta real que coincide con esta descrición que nos diste antes. Bótalle unha ollada: <a href='https://exoplanetarchive.ipac.caltech.edu/overview/11%20Com%20b#planet_11-Com-b_collapsible' target='_blank' rel='noopener noreferrer' class='planet-link'>11 Com b</a>",
+  "game.feedback.new_planet_discovered": "🔍 Atopouse un novo planeta que coincide con esta descrición que nos diste antes! Este descubrimento podería ser o próximo avance na investigación de exoplanetas. Aprende máis: <a href='https://exoplanetarchive.ipac.caltech.edu/overview/11%20Com%20b#planet_11-Com-b_collapsible' target='_blank' rel='noopener noreferrer' class='planet-link'>11 Com b</a>",
+  "game.feedback.no_planet_discovered": "🌟 Non se descubriu ningún planeta como este aínda! Se o atopamos, che o faremos saber. Describiches algo verdadeiramente único no universo!",
   
   "planet.earth-like": "",
   "planet.earth-like.desc": "",

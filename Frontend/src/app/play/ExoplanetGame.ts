@@ -565,7 +565,17 @@ export class ExoplanetGame {
     const hasHighConfidence = topClassification && topClassification.probability >= 0.8;
     
     if (this.gameState.gameWon) {
-      return '<div class="similarity-perfect">🎯 ' + this.t("game.congratulations") + ' ' + this.t(getPlanetTranslation(this.gameState.targetExoplanet.name, 'name')) + '! <button id="restart-btn" class="play-again-btn">🎉 ' + this.t("game.play.again") + '</button></div>';
+      // 50/50 chance to show either congratulations or real planet message
+      const showRealPlanetMessage = Math.random() < 0.5;
+      
+      if (showRealPlanetMessage) {
+        // Randomly choose between the two real planet messages
+        const useFirstMessage = Math.random() < 0.5;
+        const messageKey = useFirstMessage ? "game.feedback.real_planet_found" : "game.feedback.new_planet_discovered";
+        return '<div class="similarity-perfect"><div class="message-content">' + this.t(messageKey) + '</div><button id="restart-btn" class="play-again-btn">🎉 ' + this.t("game.play.again") + '</button></div>';
+      } else {
+        return '<div class="similarity-perfect"><div class="message-content">' + this.t("game.feedback.no_planet_discovered") + '</div><button id="restart-btn" class="play-again-btn">🎉 ' + this.t("game.play.again") + '</button></div>';
+      }
     } else if (isCorrectClassification && !hasHighConfidence) {
       return '<div class="similarity-good">' + this.t("game.feedback.correct_but_low_confidence") + ' (' + Math.round(topClassification.probability * 100) + '%)</div>';
     } else if (similarity >= 0.8) {

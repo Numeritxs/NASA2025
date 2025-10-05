@@ -41,6 +41,9 @@
   "game.feedback.fair": "Regular. Intenta ajustar alguns paràmetres.",
   "game.feedback.poor": "Continua intentant! Encara estàs lluny de l'objectiu.",
   "game.feedback.correct_but_low_confidence": "Classificació correcta, però baixa confiança",
+  "game.feedback.real_planet_found": "🎉 Hi ha un planeta exactament com aquest! Els científics han descobert un exoplaneta real que coincideix amb aquesta descripció que ens vas donar abans. Fes-li un cop d'ull: <a href='https://exoplanetarchive.ipac.caltech.edu/overview/11%20Com%20b#planet_11-Com-b_collapsible' target='_blank' rel='noopener noreferrer' class='planet-link'>11 Com b</a>",
+  "game.feedback.new_planet_discovered": "🔍 S'ha trobat un nou planeta que coincideix amb aquesta descripció que ens vas donar abans! Aquest descobriment podria ser el proper avanç en la recerca d'exoplanetes. Aprèn més: <a href='https://exoplanetarchive.ipac.caltech.edu/overview/11%20Com%20b#planet_11-Com-b_collapsible' target='_blank' rel='noopener noreferrer' class='planet-link'>11 Com b</a>",
+  "game.feedback.no_planet_discovered": "🌟 No s'ha descobert cap planeta com aquest encara! Si el trobem, t'ho farem saber. Has descrit alguna cosa veritablement única a l'univers!",
   
   "planet.earth-like": "Tipus Terra",
   "planet.earth-like.desc": "Un planeta terrestre amb aigua líquida i una atmosfera respirable",

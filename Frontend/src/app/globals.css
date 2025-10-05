@@ -386,15 +386,51 @@ body {
 .similarity-perfect {
   color: #ffd700;
   font-weight: bold;
-  padding: 8px;
+  padding: 12px;
   background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 193, 7, 0.2));
   border-radius: 5px;
   border-left: 3px solid #ffd700;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
   animation: perfectGlow 2s ease-in-out infinite alternate;
+}
+
+.similarity-perfect .planet-link {
+  color: #64b5f6;
+  text-decoration: underline;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.similarity-perfect .planet-link:hover {
+  color: #42a5f5;
+  text-decoration: none;
+}
+
+.similarity-perfect .play-again-btn {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background: linear-gradient(45deg, #64b5f6, #42a5f5);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(100, 181, 246, 0.3);
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.similarity-perfect .play-again-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(100, 181, 246, 0.4);
+}
+
+.similarity-perfect .message-content {
+  margin-bottom: 10px;
+  line-height: 1.4;
 }
 
 @keyframes perfectGlow {
