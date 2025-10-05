@@ -137,6 +137,9 @@ export class ExoplanetGame {
 
     // Setup panel toggles
     this.setupPanelToggles();
+    
+    // Initially hide right panel arrow since feedback is empty
+    this.updateRightPanelVisibility();
   }
 
   private setupPanelToggles() {
@@ -144,15 +147,19 @@ export class ExoplanetGame {
     const rightToggle = this.container.querySelector('#right-toggle') as HTMLElement;
     const leftPanel = this.container.querySelector('#left-panel-content') as HTMLElement;
     const rightPanel = this.container.querySelector('#right-panel-content') as HTMLElement;
+    const leftPanelContainer = this.container.querySelector('.left-panel') as HTMLElement;
+    const rightPanelContainer = this.container.querySelector('.right-panel') as HTMLElement;
 
     // Left panel toggle
     leftToggle.addEventListener('click', () => {
       const isOpen = leftPanel.classList.contains('open');
       if (isOpen) {
         leftPanel.classList.remove('open');
+        leftPanelContainer.classList.remove('open');
         leftToggle.querySelector('.arrow')!.textContent = '▶';
       } else {
         leftPanel.classList.add('open');
+        leftPanelContainer.classList.add('open');
         leftToggle.querySelector('.arrow')!.textContent = '◀';
       }
     });
@@ -162,9 +169,11 @@ export class ExoplanetGame {
       const isOpen = rightPanel.classList.contains('open');
       if (isOpen) {
         rightPanel.classList.remove('open');
+        rightPanelContainer.classList.remove('open');
         rightToggle.querySelector('.arrow')!.textContent = '◀';
       } else {
         rightPanel.classList.add('open');
+        rightPanelContainer.classList.add('open');
         rightToggle.querySelector('.arrow')!.textContent = '▶';
       }
     });
@@ -408,6 +417,9 @@ export class ExoplanetGame {
         this.restartGame();
       });
     }
+    
+    // Show right panel arrow since feedback now has content
+    this.updateRightPanelVisibility();
   }
 
   private getSimilarityMessage(): string {
@@ -428,6 +440,17 @@ export class ExoplanetGame {
     }
   }
 
+  private updateRightPanelVisibility() {
+    const rightToggle = this.container.querySelector('#right-toggle') as HTMLElement;
+    const hasContent = this.feedbackContainer.innerHTML.trim() !== '';
+    
+    if (hasContent) {
+      rightToggle.style.display = 'flex';
+    } else {
+      rightToggle.style.display = 'none';
+    }
+  }
+
 
 
   private restartGame() {
@@ -437,6 +460,9 @@ export class ExoplanetGame {
     this.updateUI();
     this.updatePlanetVisualization();
     this.feedbackContainer.innerHTML = '';
+    
+    // Hide right panel arrow since feedback is now empty
+    this.updateRightPanelVisibility();
   }
 
   public getGameState(): GameState {
