@@ -40,9 +40,12 @@
   "game.feedback.good": "Bé! T'estàs acostant!",
   "game.feedback.fair": "Regular. Intenta ajustar alguns paràmetres.",
   "game.feedback.poor": "Continua intentant! Encara estàs lluny de l'objectiu.",
+  "game.feedback.correct_but_low_confidence": "Classificació correcta, però baixa confiança",
   
   "planet.earth-like": "Tipus Terra",
   "planet.earth-like.desc": "Un planeta terrestre amb aigua líquida i una atmosfera respirable",
+  "planet.sub-earth": "Sub Terra",
+  "planet.sub-earth.desc": "Un planeta terrestre més petit, potencialment habitable",
   "planet.super-earth": "Súper Terra",
   "planet.super-earth.desc": "Un planeta terrestre més gran, potencialment habitable",
   "planet.ocean-world": "Món Oceànic",

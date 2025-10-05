@@ -34,9 +34,12 @@
   "game.feedback.good": "¡Bien! Te estás acercando!",
   "game.feedback.fair": "Regular. Intenta ajustar algunos parámetros.",
   "game.feedback.poor": "¡Sigue intentando! Aún estás lejos del objetivo.",
+  "game.feedback.correct_but_low_confidence": "Clasificación correcta, pero baja confianza",
   
   "planet.earth-like": "Tipo Tierra",
   "planet.earth-like.desc": "Un planeta terrestre con agua líquida y una atmósfera respirable",
+  "planet.sub-earth": "Sub Tierra",
+  "planet.sub-earth.desc": "Un planeta terrestre más pequeño, potencialmente habitable",
   "planet.super-earth": "Súper Tierra",
   "planet.super-earth.desc": "Un planeta terrestre más grande, potencialmente habitable",
   "planet.ocean-world": "Mundo Oceánico",

@@ -34,9 +34,12 @@
   "game.feedback.good": "Good! You're getting closer!",
   "game.feedback.fair": "Fair. Try adjusting some parameters.",
   "game.feedback.poor": "Keep trying! You're still far from the target.",
+  "game.feedback.correct_but_low_confidence": "Correct classification, but low confidence",
   
   "planet.earth-like": "Earth-like",
   "planet.earth-like.desc": "A terrestrial planet with liquid water and a breathable atmosphere",
+  "planet.sub-earth": "Sub Earth",
+  "planet.sub-earth.desc": "A smaller terrestrial planet, potentially habitable",
   "planet.super-earth": "Super Earth",
   "planet.super-earth.desc": "A larger terrestrial planet, potentially habitable",
   "planet.ocean-world": "Ocean World",

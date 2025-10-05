@@ -29,6 +29,18 @@ export class ExoplanetClassifier {
       }
     },
     {
+      name: 'Sub Earth',
+      description: 'A smaller terrestrial planet, potentially habitable',
+      characteristics: {
+        massRange: [0.1, 0.5],
+        radiusRange: [0.3, 0.8],
+        temperatureRange: [200, 300],
+        orbitalDistanceRange: [0.5, 1.5],
+        atmosphereRange: [0.3, 1.0],
+        compositionRange: [40, 80]
+      }
+    },
+    {
       name: 'Super Earth',
       description: 'A larger terrestrial planet, potentially habitable',
       characteristics: {
@@ -219,6 +231,18 @@ export class ExoplanetClassifier {
           atmosphere: 1.0,
           composition: 71,
           brightness: 1.0
+        }
+      },
+      {
+        name: 'Sub Earth',
+        parameters: {
+          mass: 0.3,
+          radius: 0.6,
+          temperature: 250,
+          orbitalDistance: 0.8,
+          atmosphere: 0.6,
+          composition: 60,
+          brightness: 0.8
         }
       },
       {
