@@ -55,5 +55,8 @@
   "planet.ice-giant": "Ice Giant",
   "planet.ice-giant.desc": "A planet composed of ice, water, and other volatiles",
   "planet.desert-world": "Desert World",
-  "planet.desert-world.desc": "A dry, arid planet with little to no water"
+  "planet.desert-world.desc": "A dry, arid planet with little to no water",
+
+  "qr.scan": "Scan this QR code to access the application",
+  "qr.url": "http://{ip}:3000"
 }

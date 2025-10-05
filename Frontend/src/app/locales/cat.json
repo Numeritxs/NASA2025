@@ -60,5 +60,8 @@
   "planet.ice-giant": "Gegant de Gel",
   "planet.ice-giant.desc": "Un planeta compost de gel, aigua i altres volàtils",
   "planet.desert-world": "Món Desèrtic",
-  "planet.desert-world.desc": "Un planeta sec i àrid amb poca o cap aigua"
+  "planet.desert-world.desc": "Un planeta sec i àrid amb poca o cap aigua",
+
+  "qr.scan": "Escaneja aquest codi QR per accedir a l'aplicació",
+  "qr.url": "http://{ip}:3000"
 }
