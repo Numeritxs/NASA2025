@@ -33,7 +33,7 @@ const planetConfigs: Record<string, PlanetConfig> = {
     }
   },
   'Sub Earth': {
-    textureUrl: '/textures/desert.jpg',
+    textureUrl: '/textures/earth.jpg',
     color: 0x8b4513,
     atmosphere: {
       density: 0.3,

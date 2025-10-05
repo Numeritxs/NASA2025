@@ -27,6 +27,10 @@ export const PLANET_TRANSLATION_KEYS: Record<string, { name: string; desc: strin
   'Desert World': {
     name: 'planet.desert-world',
     desc: 'planet.desert-world.desc'
+  },
+  'Sub Earth': {
+    name: 'planet.sub-earth',
+    desc: 'planet.sub-earth.desc'
   }
 };
 
