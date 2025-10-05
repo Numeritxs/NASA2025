@@ -6,6 +6,7 @@ import { SpaceScene } from '../components/SpaceScene/SpaceScene';
 import { Planet } from '../components/CelestialBodies/Planet';
 import { getTopClassificationConfig, type PlanetConfig } from './PlanetConfigs';
 import { getPlanetTranslation } from './PlanetTranslations';
+import { exoplanetAPI } from '../../lib/api';
 
 export interface GameState {
   targetExoplanet: {
@@ -16,7 +17,6 @@ export interface GameState {
   lastClassification: ExoplanetType[];
   similarity: number;
   attempts: number;
-  maxAttempts: number;
   gameWon: boolean;
 }
 
@@ -56,7 +56,6 @@ export class ExoplanetGame {
       lastClassification: [],
       similarity: 0,
       attempts: 0,
-      maxAttempts: 10,
       gameWon: false
     };
   }
@@ -72,8 +71,7 @@ export class ExoplanetGame {
               <p id="target-description"></p>
             </div>
             <div class="game-stats">
-              <div>${this.t("game.attempts")}: <span id="attempts">${this.gameState.attempts}</span>/<span id="max-attempts">${this.gameState.maxAttempts}</span></div>
-              <div>${this.t("game.similarity")}: <span id="similarity">0%</span></div>
+              <div>${this.t("game.attempts")}: <span id="attempts">${this.gameState.attempts}</span></div>
             </div>
           </div>
         </div>
@@ -116,6 +114,9 @@ export class ExoplanetGame {
     console.log('Slider initialized successfully');
     
     this.updateTargetDescription();
+    
+    // Setup button event listener after slider is created
+    this.setupClassifyButton();
   }
 
   private setupSpaceScene() {
@@ -132,17 +133,105 @@ export class ExoplanetGame {
       this.updatePlanetVisualization();
     });
 
-    // Override the classify button behavior
-    const classifyBtn = this.container.querySelector('#classify-btn') as HTMLButtonElement;
-    classifyBtn.addEventListener('click', () => {
-      this.handleClassification();
-    });
-
     // Setup panel toggles
     this.setupPanelToggles();
     
     // Initially hide right panel arrow since feedback is empty
     this.updateRightPanelVisibility();
+  }
+
+  private setupClassifyButton() {
+    // Wait a bit for the DOM to be fully rendered
+    setTimeout(() => {
+      const classifyBtn = this.container.querySelector('#classify-btn') as HTMLButtonElement;
+      console.log('Game: Classify button found:', classifyBtn);
+      if (classifyBtn) {
+        classifyBtn.addEventListener('click', () => {
+          console.log('Game: Classify button clicked!');
+          this.handleClassification();
+        });
+        console.log('Game: Classify button event listener added');
+      } else {
+        console.error('Game: Classify button not found!');
+      }
+    }, 100);
+  }
+
+  private convertToExoplanetTypes(classifications: any[]): ExoplanetType[] {
+    // Get default characteristics for each exoplanet type from the classifier
+    const defaultCharacteristics = {
+      'Earth-like': {
+        massRange: [0.5, 2] as [number, number],
+        radiusRange: [0.8, 1.5] as [number, number],
+        temperatureRange: [250, 320] as [number, number],
+        orbitalDistanceRange: [0.7, 1.5] as [number, number],
+        atmosphereRange: [0.8, 1.2] as [number, number],
+        compositionRange: [60, 90] as [number, number]
+      },
+      'Sub Earth': {
+        massRange: [0.1, 0.5] as [number, number],
+        radiusRange: [0.3, 0.8] as [number, number],
+        temperatureRange: [200, 300] as [number, number],
+        orbitalDistanceRange: [0.5, 1.5] as [number, number],
+        atmosphereRange: [0.3, 1.0] as [number, number],
+        compositionRange: [40, 80] as [number, number]
+      },
+      'Super Earth': {
+        massRange: [2, 10] as [number, number],
+        radiusRange: [1.2, 2] as [number, number],
+        temperatureRange: [200, 350] as [number, number],
+        orbitalDistanceRange: [0.5, 2] as [number, number],
+        atmosphereRange: [1, 50] as [number, number],
+        compositionRange: [30, 80] as [number, number]
+      },
+      'Hot Jupiter': {
+        massRange: [50, 500] as [number, number],
+        radiusRange: [8, 15] as [number, number],
+        temperatureRange: [500, 2000] as [number, number],
+        orbitalDistanceRange: [0.01, 0.1] as [number, number],
+        atmosphereRange: [50, 200] as [number, number],
+        compositionRange: [0, 20] as [number, number]
+      },
+      'Gas Giant': {
+        massRange: [50, 1000] as [number, number],
+        radiusRange: [8, 20] as [number, number],
+        temperatureRange: [100, 500] as [number, number],
+        orbitalDistanceRange: [1, 10] as [number, number],
+        atmosphereRange: [50, 200] as [number, number],
+        compositionRange: [0, 20] as [number, number]
+      },
+      'Ice Giant': {
+        massRange: [10, 50] as [number, number],
+        radiusRange: [3, 8] as [number, number],
+        temperatureRange: [50, 200] as [number, number],
+        orbitalDistanceRange: [5, 30] as [number, number],
+        atmosphereRange: [10, 100] as [number, number],
+        compositionRange: [20, 60] as [number, number]
+      },
+      'Ocean World': {
+        massRange: [0.5, 5] as [number, number],
+        radiusRange: [0.8, 2] as [number, number],
+        temperatureRange: [250, 350] as [number, number],
+        orbitalDistanceRange: [0.5, 2] as [number, number],
+        atmosphereRange: [0.5, 2] as [number, number],
+        compositionRange: [80, 100] as [number, number]
+      },
+      'Desert World': {
+        massRange: [0.3, 3] as [number, number],
+        radiusRange: [0.5, 1.5] as [number, number],
+        temperatureRange: [300, 600] as [number, number],
+        orbitalDistanceRange: [0.3, 1.5] as [number, number],
+        atmosphereRange: [0.1, 1] as [number, number],
+        compositionRange: [0, 20] as [number, number]
+      }
+    };
+
+    return classifications.map(classification => ({
+      name: classification.name,
+      description: classification.description,
+      characteristics: defaultCharacteristics[classification.name as keyof typeof defaultCharacteristics] || defaultCharacteristics['Earth-like'],
+      probability: classification.probability
+    }));
   }
 
   private setupPanelToggles() {
@@ -318,18 +407,61 @@ export class ExoplanetGame {
   }
 
   private async handleClassification() {
-    if (this.gameState.gameWon || this.gameState.attempts >= this.gameState.maxAttempts) {
+    console.log('Game: handleClassification called');
+    
+    if (this.gameState.gameWon) {
+      console.log('Game: Early return - game already won');
       return;
     }
 
     this.gameState.attempts++;
+    console.log('Game: Attempt', this.gameState.attempts);
     
-    // TODO: Replace with backend API call
     // Send parameters to backend AI for classification
     try {
-      const response = await this.sendToBackend(this.gameState.currentGuess);
-      this.gameState.lastClassification = response.classifications;
-      this.gameState.similarity = response.similarity;
+      console.log('Game: Converting parameters to backend format');
+      const backendData = exoplanetAPI.convertGameParametersToBackend(this.gameState.currentGuess);
+      console.log('Game: Converted data', backendData);
+      
+      console.log('Game: Calling backend API');
+      const response = await exoplanetAPI.classifyExoplanet(backendData);
+      console.log('Game: Received response', response);
+      
+      // Convert backend response to frontend format
+      this.gameState.lastClassification = this.convertToExoplanetTypes(response.classifications || []);
+      console.log('Game: Updated lastClassification:', this.gameState.lastClassification);
+      
+      // Use the top prediction probability as similarity score
+      const topClassification = this.gameState.lastClassification[0];
+      this.gameState.similarity = topClassification ? topClassification.probability : 0;
+      console.log('Game: Updated similarity:', this.gameState.similarity);
+      
+      // Debug: Log target and classifications for comparison
+      console.log('Game: Target exoplanet:', this.gameState.targetExoplanet.name);
+      console.log('Game: All classifications:', this.gameState.lastClassification.map(c => `${c.name} (${Math.round(c.probability * 100)}%)`));
+      
+      // Check if won - look for target in top classifications with reasonable confidence
+      const targetClassification = this.gameState.lastClassification.find(
+        c => c.name === this.gameState.targetExoplanet.name
+      );
+      
+      if (targetClassification) {
+        console.log(`Game: Found target "${this.gameState.targetExoplanet.name}" with ${Math.round(targetClassification.probability * 100)}% confidence`);
+        
+        // Win condition: target is in top 2 classifications with >60% confidence, OR top classification with >70% confidence
+        const isTopClassification = targetClassification === topClassification;
+        const isTopTwo = this.gameState.lastClassification.indexOf(targetClassification) < 2;
+        const hasGoodConfidence = targetClassification.probability >= 0.6;
+        const hasHighConfidence = targetClassification.probability >= 0.7;
+        
+        if ((isTopTwo && hasGoodConfidence) || (isTopClassification && hasHighConfidence)) {
+          this.gameState.gameWon = true;
+          console.log('Game: Game won!');
+        }
+      } else {
+        console.log('Game: Target not found in classifications');
+      }
+      
     } catch (error) {
       console.error('Backend classification failed:', error);
       // Fallback to local classification
@@ -338,12 +470,25 @@ export class ExoplanetGame {
         this.gameState.currentGuess,
         this.gameState.targetExoplanet.parameters
       );
-    }
-
-    // Check if won - top classification matches target
-    const topClassification = this.gameState.lastClassification[0];
-    if (topClassification && topClassification.name === this.gameState.targetExoplanet.name) {
-      this.gameState.gameWon = true;
+      
+      // Check if won with local classifier - use same logic as backend
+      const targetClassification = this.gameState.lastClassification.find(
+        c => c.name === this.gameState.targetExoplanet.name
+      );
+      
+      if (targetClassification) {
+        console.log(`Game: Local classifier found target "${this.gameState.targetExoplanet.name}" with ${Math.round(targetClassification.probability * 100)}% confidence`);
+        
+        const topClassification = this.gameState.lastClassification[0];
+        const isTopClassification = targetClassification === topClassification;
+        const isTopTwo = this.gameState.lastClassification.indexOf(targetClassification) < 2;
+        const hasGoodConfidence = targetClassification.probability >= 0.6;
+        const hasHighConfidence = targetClassification.probability >= 0.7;
+        
+        if ((isTopTwo && hasGoodConfidence) || (isTopClassification && hasHighConfidence)) {
+          this.gameState.gameWon = true;
+        }
+      }
     }
 
     this.updateUI();
@@ -353,35 +498,17 @@ export class ExoplanetGame {
     this.updatePlanetVisualization();
   }
 
-  private async sendToBackend(parameters: ExoplanetParameters) {
-    const response = await fetch('/api/classify-exoplanet', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        parameters,
-        targetExoplanet: this.gameState.targetExoplanet.name
-      })
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    return await response.json();
-  }
 
   private updateUI() {
     const attemptsEl = this.container.querySelector('#attempts') as HTMLElement;
-    const similarityEl = this.container.querySelector('#similarity') as HTMLElement;
     
     attemptsEl.textContent = this.gameState.attempts.toString();
-    similarityEl.textContent = `${Math.round(this.gameState.similarity * 100)}%`;
   }
 
   private showFeedback() {
+    console.log('Game: showFeedback called with lastClassification:', this.gameState.lastClassification);
     const topClassification = this.gameState.lastClassification[0];
+    console.log('Game: topClassification:', topClassification);
     
     let feedbackHTML = `
       <div class="feedback-section">
@@ -393,18 +520,24 @@ export class ExoplanetGame {
           <p>${this.t(getPlanetTranslation(topClassification.name, 'desc'))}</p>
         </div>
         
-        <div class="similarity-feedback">
-          <h5>${this.t("game.similarity.feedback")}: ${Math.round(this.gameState.similarity * 100)}%</h5>
-          <p class="similarity-explanation">${this.t("game.similarity.explanation")}</p>
-          ${this.getSimilarityMessage()}
-        </div>
-        
         ${this.gameState.lastClassification.length > 1 ? `
           <div class="other-classifications">
             <h5>${this.t("game.other.possibilities")}:</h5>
             ${this.gameState.lastClassification.slice(1, 4).map(type => 
               `<div>${this.t(getPlanetTranslation(type.name, 'name'))} (${Math.round(type.probability * 100)}%)</div>`
             ).join('')}
+          </div>
+        ` : ''}
+        
+        <!-- Add similarity message with restart button -->
+        <div class="similarity-feedback">
+          ${this.getSimilarityMessage()}
+        </div>
+        
+        <!-- Add general restart button for non-winning cases -->
+        ${!this.gameState.gameWon ? `
+          <div class="game-actions">
+            <button id="restart-btn" class="restart-btn">🔄 ${this.t("game.restart")}</button>
           </div>
         ` : ''}
         
@@ -429,9 +562,12 @@ export class ExoplanetGame {
     const similarity = this.gameState.similarity;
     const topClassification = this.gameState.lastClassification[0];
     const isCorrectClassification = topClassification && topClassification.name === this.gameState.targetExoplanet.name;
+    const hasHighConfidence = topClassification && topClassification.probability >= 0.8;
     
-    if (isCorrectClassification) {
+    if (this.gameState.gameWon) {
       return '<div class="similarity-perfect">🎯 ' + this.t("game.congratulations") + ' ' + this.t(getPlanetTranslation(this.gameState.targetExoplanet.name, 'name')) + '! <button id="restart-btn" class="play-again-btn">🎉 ' + this.t("game.play.again") + '</button></div>';
+    } else if (isCorrectClassification && !hasHighConfidence) {
+      return '<div class="similarity-good">' + this.t("game.feedback.correct_but_low_confidence") + ' (' + Math.round(topClassification.probability * 100) + '%)</div>';
     } else if (similarity >= 0.8) {
       return '<div class="similarity-excellent">' + this.t("game.feedback.close") + '</div>';
     } else if (similarity >= 0.6) {
