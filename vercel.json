@@ -13,7 +13,10 @@
     },
     {
       "src": "api/**/*.py",
-      "use": "@vercel/python"
+      "use": "@vercel/python",
+      "config": {
+        "runtime": "python3.9"
+      }
     }
   ],
   "routes": [
@@ -28,10 +31,5 @@
   ],
   "env": {
     "NEXT_PUBLIC_API_URL": "/api"
-  },
-  "functions": {
-    "api/**/*.py": {
-      "runtime": "python3.9"
-    }
   }
 }
